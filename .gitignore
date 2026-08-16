@@ -1,0 +1,20 @@
+# Compiled binary
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+Ethernet-Frame-Parser
+Ethernet-Frame-Parser.exe
+
+# Test/debug output
+*.test
+*.out
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
