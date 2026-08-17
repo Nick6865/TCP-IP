@@ -1,8 +1,15 @@
 package link
 
 import (
+	"fmt"
 	"log"
 	"net"
+)
+
+const (
+	EtherTypeIPv4 = 0x0800
+	EtherTypeARP  = 0x0806
+	EtherTypeIPv6 = 0x86DD
 )
 
 type EthernetFrame struct { //datalink header
@@ -36,4 +43,17 @@ func ParseEthernetFrame(data []byte) (EthernetFrame, []byte) {
 	payload := data[14:]
 
 	return frame, payload
+}
+
+func HandlePayload(frame EthernetFrame, payload []byte) {
+	switch frame.EtherType {
+	case EtherTypeIPv4:
+		fmt.Println("           -> Payload is IPv4")
+	case EtherTypeIPv6:
+		fmt.Println("           -> Payload is IPv6 (not handled yet)")
+	case EtherTypeARP:
+		fmt.Println("           -> Payload is ARP")
+	default:
+		fmt.Printf("           -> Unknown Ethernet Type: 0x%04x\n", frame.EtherType)
+	}
 }
