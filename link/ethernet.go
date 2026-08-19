@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net"
+
+	"tcp-ip-stack/internet"
 )
 
 const (
@@ -53,6 +55,8 @@ func HandlePayload(frame EthernetFrame, payload []byte) {
 		fmt.Println("           -> Payload is IPv6 (not handled yet)")
 	case EtherTypeARP:
 		fmt.Println("           -> Payload is ARP")
+		arppacket := internet.ParseARP(payload)
+		internet.PrintARP(arppacket)
 	default:
 		fmt.Printf("           -> Unknown Ethernet Type: 0x%04x\n", frame.EtherType)
 	}
