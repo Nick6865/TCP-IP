@@ -47,8 +47,8 @@ func PrintARP(packet ARPPacket) {
 	//tgtMAC := net.HardwareAddr(packet.target_mac[:])
 
 	if packet.opcode == 1 { //this is an arp request
-		fmt.Printf("ARP Request: Who has %s? Tell %s, my MAC address is: %s", tgtIP, srcIP, srcMAC)
+		fmt.Printf("\t\t\tARP Request: Who has %s? Tell %s, my MAC address is: %s\n", tgtIP, srcIP, srcMAC)
 	} else if packet.opcode == 2 {
-		fmt.Printf("ARP Reply: %s is at: %s", srcIP, srcMAC)
+		fmt.Printf("\t\t\tARP Reply: %s is at: %s\n", srcIP, srcMAC)
 	}
 }
