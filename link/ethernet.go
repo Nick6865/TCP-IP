@@ -50,7 +50,18 @@ func ParseEthernetFrame(data []byte) (EthernetFrame, []byte) {
 func HandlePayload(frame EthernetFrame, payload []byte) {
 	switch frame.EtherType {
 	case EtherTypeIPv4:
-		fmt.Println("           -> Payload is IPv4")
+		ipHeader, ipPayload, err := internet.ParseIPv4(payload)
+		if err != nil {
+			fmt.Printf("           -> IPv4 parse error: %v\n", err)
+			return
+		}
+		valid := internet.VerifyChecksum(payload[:int(ipHeader.Ihl)*4])
+
+		fmt.Printf("\t\t\t[IPv4] %s -> %s | Protocol: %d | TTL: %d | Checksum valid: %v\n",
+			net.IP(ipHeader.SrcIP[:]), net.IP(ipHeader.DstIP[:]),
+			ipHeader.Protocol, ipHeader.Ttl, valid)
+
+		_ = ipPayload
 	case EtherTypeIPv6:
 		fmt.Println("           -> Payload is IPv6 (not handled yet)")
 	case EtherTypeARP:
