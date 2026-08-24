@@ -28,15 +28,6 @@ func VerifyChecksum(headerBytes []byte) bool {
 	if len(headerBytes) < 12 {
 		return false
 	}
-	ogChecksum := binary.BigEndian.Uint16(headerBytes[10:12])
 
-	headerCopy := make([]byte, len(headerBytes))
-	copy(headerCopy, headerBytes)
-
-	headerCopy[10] = 0
-	headerCopy[11] = 0
-
-	calculate := CalculateChecksum(headerCopy)
-
-	return calculate == ogChecksum
+	return CalculateChecksum(headerBytes) == 0
 }
