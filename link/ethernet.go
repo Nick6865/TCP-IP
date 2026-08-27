@@ -23,7 +23,7 @@ type EthernetFrame struct { //datalink header
 
 func ParseEthernetFrame(data []byte) (EthernetFrame, []byte) {
 	if len(data) < 14 {
-		log.Fatalf("data is too short")
+		log.Fatalf("data is too short\n")
 		return EthernetFrame{}, nil
 	}
 	var frame EthernetFrame
@@ -62,6 +62,10 @@ func HandlePayload(frame EthernetFrame, payload []byte) {
 			ipHeader.Protocol, ipHeader.Ttl, valid)
 
 		_ = ipPayload
+		if ipHeader.Protocol == 1 {  // 1 = ICMP
+    		icmpHeader, _, _ := internet.ParseICMP(ipPayload)
+    		internet.PrintICMP(icmpHeader)
+		}
 	case EtherTypeIPv6:
 		fmt.Println("           -> Payload is IPv6 (not handled yet)")
 	case EtherTypeARP:
