@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"tcp-ip-stack/internet"
+	"tcp-ip-stack/transport"
 )
 
 const (
@@ -62,12 +63,25 @@ func HandlePayload(frame EthernetFrame, payload []byte) {
 			ipHeader.Protocol, ipHeader.Ttl, valid)
 
 		_ = ipPayload
-		if ipHeader.Protocol == 1 { // 1 = ICMP
-			icmpHeader, _, _ := internet.ParseICMP(ipPayload)
-			internet.PrintICMP(icmpHeader)
+		switch ipHeader.Protocol { // 1 = ICMP
+		case 1:
+			icmpHeader, icmpPayload, err := internet.ParseICMP(ipPayload)
+			if err != nil {
+				fmt.Printf("\t\t\tICMP parse error: %v\n", err)
+				return
+			}
 
+			_ = icmpPayload
 			internet.PrintICMP(icmpHeader)
 			fmt.Printf("\t\t\t | Checksum valid: %v\n", valid)
+		case 17:
+			udpHeader, udpPayload, err := transport.ParseUDP(ipPayload)
+			if err != nil {
+				fmt.Printf("\t\t\tUDP parse error: %v\n", err)
+				return
+			}
+			fmt.Printf("\t\t\t[UDP] Port %d -> %d | Length: %d\n", udpHeader.SrcPort, udpHeader.DstPort, udpHeader.Length)
+			_ = udpPayload
 		}
 	case EtherTypeIPv6:
 		fmt.Println("           -> Payload is IPv6 (not handled yet)")
