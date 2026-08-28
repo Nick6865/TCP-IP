@@ -62,9 +62,12 @@ func HandlePayload(frame EthernetFrame, payload []byte) {
 			ipHeader.Protocol, ipHeader.Ttl, valid)
 
 		_ = ipPayload
-		if ipHeader.Protocol == 1 {  // 1 = ICMP
-    		icmpHeader, _, _ := internet.ParseICMP(ipPayload)
-    		internet.PrintICMP(icmpHeader)
+		if ipHeader.Protocol == 1 { // 1 = ICMP
+			icmpHeader, _, _ := internet.ParseICMP(ipPayload)
+			internet.PrintICMP(icmpHeader)
+
+			internet.PrintICMP(icmpHeader)
+			fmt.Printf("\t\t\t | Checksum valid: %v\n", valid)
 		}
 	case EtherTypeIPv6:
 		fmt.Println("           -> Payload is IPv6 (not handled yet)")

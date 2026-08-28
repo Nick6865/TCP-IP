@@ -40,3 +40,7 @@ func PrintICMP(icmp ICMPHeader) {
 		fmt.Printf("\t\t\tICMP Echo Type: %v | Code: %v\n", icmp.IcmpType, icmp.Code)
 	}
 }
+
+func VerifyICMPChecksum(icmpBytes []byte) bool {
+	return CalculateChecksum(icmpBytes) == 0
+}
