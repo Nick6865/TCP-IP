@@ -3,6 +3,7 @@ package transport
 import (
 	"encoding/binary"
 	"errors"
+	"tcp-ip-stack/internet"
 )
 
 type UDPHeader struct {
@@ -27,4 +28,23 @@ func ParseUDP(payload []byte) (UDPHeader, []byte, error) {
 	data := payload[8:]
 
 	return udp, data, nil
+}
+
+func VerifyUDPChecksum(srcIP, dstIP [4]byte, udpBytes []byte) bool {
+	if udpBytes[6] == 0 && udpBytes[7] == 0 {
+		return true
+	}
+
+	pseudoHeader := make([]byte, 12)
+
+	copy(pseudoHeader[0:4], srcIP[:])
+	copy(pseudoHeader[4:8], dstIP[:])
+
+	pseudoHeader[8] = 0                                                    //zero
+	pseudoHeader[9] = 17                                                   //protocol
+	binary.BigEndian.PutUint16(pseudoHeader[10:12], uint16(len(udpBytes))) //udp len
+
+	full := append(pseudoHeader, udpBytes...)
+
+	return internet.CalculateChecksum(full) == 0
 }

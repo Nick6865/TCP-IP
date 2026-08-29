@@ -82,6 +82,8 @@ func HandlePayload(frame EthernetFrame, payload []byte) {
 			}
 			fmt.Printf("\t\t\t[UDP] Port %d -> %d | Length: %d\n", udpHeader.SrcPort, udpHeader.DstPort, udpHeader.Length)
 			_ = udpPayload
+			udpValid := transport.VerifyUDPChecksum(ipHeader.SrcIP, ipHeader.DstIP, ipPayload)
+			fmt.Printf("\t\t\t | Checksum valid: %v\n", udpValid)
 		}
 	case EtherTypeIPv6:
 		fmt.Println("           -> Payload is IPv6 (not handled yet)")
