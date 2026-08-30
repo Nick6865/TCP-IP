@@ -29,11 +29,13 @@ The implementation follows a bottom-up layered approach:
 ### 2. Network Layer (L3)
 - [x] IPv4 header construction and payload decoding.
 - [x] Internet Checksum implementation (One's Complement Sum).
-- [ ] Basic ICMP handling (Echo Request / Reply).
+- [x] Basic ICMP handling (Echo Request / Reply).
 
 ### 3. Transport Layer (L4) *(In Progress)*
+- [x] UDP header parsing and checksum verification with pseudo-header.
 - [ ] TCP segment structure parsing and byte-level manipulation.
 - [ ] Basic connection state handling (SYN, SYN-ACK, ACK sequence flow).
+- [ ] Retransmission and window management.
 
 ---
 
