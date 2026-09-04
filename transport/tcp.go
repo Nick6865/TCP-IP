@@ -3,6 +3,7 @@ package transport
 import (
 	"encoding/binary"
 	"errors"
+	"fmt"
 )
 
 type TCPHeader struct {
@@ -54,4 +55,34 @@ func ParseTCP(payload []byte) (TCPHeader, []byte, error) {
 	}
 
 	return tcp, payload[headerLen:], nil
+}
+
+func PrintTCPFlags(flags uint8) string {
+	result := ""
+	if flags&0x02 != 0 {
+		result += "SYN "
+	}
+	if flags&0x10 != 0 {
+		result += "ACK "
+	}
+	if flags&0x01 != 0 {
+		result += "FIN "
+	}
+	if flags&0x04 != 0 {
+		result += "RST "
+	}
+	if flags&0x08 != 0 {
+		result += "PSH "
+	}
+	if flags&0x20 != 0 {
+		result += "URG "
+	}
+	if result == "" {
+		return "NONE"
+	}
+	return result
+}
+
+func PrintTCP(tcp TCPHeader) {
+	fmt.Printf("\t\t\t[TCP] Port %d -> %d | Seq: %d | Ack: %d | Flags: [%s] | Window: %d\n", tcp.SrcPort, tcp.DstPort, tcp.SeqNum, tcp.ACKNum, PrintTCPFlags(tcp.Flags), tcp.Window)
 }

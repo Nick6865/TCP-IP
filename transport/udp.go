@@ -3,6 +3,7 @@ package transport
 import (
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"tcp-ip-stack/internet"
 )
 
@@ -28,6 +29,10 @@ func ParseUDP(payload []byte) (UDPHeader, []byte, error) {
 	data := payload[8:]
 
 	return udp, data, nil
+}
+
+func PrintUDP(udpHeader UDPHeader) {
+	fmt.Printf("\t\t\t[UDP] Port %d -> %d | Length: %d\n", udpHeader.SrcPort, udpHeader.DstPort, udpHeader.Length)
 }
 
 func VerifyUDPChecksum(srcIP, dstIP [4]byte, udpBytes []byte) bool {

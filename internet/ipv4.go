@@ -3,6 +3,8 @@ package internet
 import (
 	"encoding/binary"
 	"errors"
+	"fmt"
+	"net"
 )
 
 type IPv4Header struct {
@@ -21,7 +23,7 @@ type IPv4Header struct {
 
 func ParseIPv4(data []byte) (IPv4Header, []byte, error) {
 	if len(data) < 20 {
-		return IPv4Header{}, nil, errors.New("IP header too short")
+		return IPv4Header{}, nil, errors.New("IP header too short\n")
 	}
 
 	ip := IPv4Header{
@@ -42,4 +44,10 @@ func ParseIPv4(data []byte) (IPv4Header, []byte, error) {
 	headerLengthBytes := int(ip.Ihl) * 4
 
 	return ip, data[headerLengthBytes:], nil
+}
+
+func PrintIPv4(ipHeader IPv4Header, valid bool) {
+	fmt.Printf("\t\t\t[IPv4] %s -> %s | Protocol: %d | TTL: %d | Checksum valid: %v\n",
+		net.IP(ipHeader.SrcIP[:]), net.IP(ipHeader.DstIP[:]),
+		ipHeader.Protocol, ipHeader.Ttl, valid)
 }
