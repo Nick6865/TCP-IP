@@ -93,6 +93,7 @@ func HandlePayload(frame EthernetFrame, payload []byte) {
 				return
 			}
 			transport.PrintTCP(tcpHeader)
+			transport.TrackTCPConnection(ipHeader.SrcIP, ipHeader.DstIP, tcpHeader)
 			_ = tcpPayload
 		}
 	case EtherTypeIPv6:
